@@ -1,0 +1,75 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between">
+    <h5>Stories</h5>
+    <a href="{% url 'allStory' %}">view more &rarr;</a>
+  </div>
+  <hr />
+
+  <div class="mb-3">
+    <div class="row g-2">
+      <div class="col-md-8">
+        {% for story in stories %}
+        <div class="d-flex justify-content-between">
+          <div class="">
+            <div class="">
+              <h5 class="">{{ story.title }}</h5>
+              <p class="">{{ story.description|slice:"0:200" |safe }}</p>
+              <a href="{% url 'postDetails' story.slug %}">see more &rarr;</a>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end">
+            <img src="/media/{{story.image}}" class="w-50 rounded" alt="img" />
+          </div>
+        </div>
+        <hr />
+        {% endfor %}
+      </div>
+
+      <div class="col-md-4">
+        <div class="Regular shadow rounded p-2" style="background-color: #ffff">
+          <h5 class="mt-3">Top Stories</h5>
+          <hr />
+          {% for story in stories_ordered_by_likes %}
+          <div style="margin-top: -10px; margin-bottom: -30px" class="">
+            <div class="card-body d-flex">
+              <!-- Rounded Image on the Left -->
+              <img
+                src="/media/{{story.image}}"
+                class="rounded m-0 p-0"
+                alt="Your Image"
+                style="width: 50px; height: 50px"
+              />
+
+              <!-- Title and Paragraph on the Right -->
+              <div class="mx-3">
+                <a href="{% url 'postDetails' story.slug %}">
+                  <h5 style="color: #000">{{ story.title }}</h5></a
+                >
+                <p class="">{{ story.description|slice:"0:100" |safe }}</p>
+                <div style="margin-top: -20px" class="d-flex">
+                  <!-- Love Icon -->
+                  <span class="d-flex align-items-center text-danger"
+                    ><i class="bi bi-heart-fill"></i>
+                    <p class="p-2">{{story.get_like_count}}</p></span
+                  >
+
+                  <!-- Comment Icon -->
+                  <span style="color:black" class="d-flex align-items-center">
+                   <i class="bi bi-chat-left-dots"></i>
+                    <p class="p-2">{{story.get_comments_count}}</p>
+                  </span>
+                  <!-- save Icon -->
+                  <span style="color:black" class="d-flex align-items-center">
+                  <i class="bi bi-bookmark-check-fill"></i>
+                    <p class="p-2">{{story.get_bookmarks_count}}</p>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

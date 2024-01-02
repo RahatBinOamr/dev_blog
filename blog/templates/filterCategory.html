@@ -1,0 +1,62 @@
+<section class="container mt-4">
+  <hr />
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+      <div class="">
+        <div class="card-body">
+          <h5 class="card-title">Tech</h5>
+          <hr />
+          {% for story in filterTech %}
+          <div class="mt-3">
+            <a style="color: black" href="#"><h6>{{ story.title }}</h6></a>
+            <p class="card-text">{{ story.description|slice:"0:200" |safe }}</p>
+          </div>
+          {% endfor %}
+
+          <div class="mt-3">
+            <a href="{% url 'tech' %}">more Tech &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="">
+        <div class="card-body">
+          <h5 class="card-title">Business</h5>
+          <hr />
+
+          {% for story in filterBusiness %}
+          <div class="mt-3">
+            <a style="color: black" href="#"><h6>{{ story.title }}</h6></a>
+            <p class="card-text">{{ story.description|slice:"0:200" |safe }}</p>
+          </div>
+          {% endfor %}
+
+          <div class="mt-3">
+            <a href="business">more Business &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="">
+        <div class="card-body">
+          <h5 class="card-title">Health</h5>
+          <hr />
+
+          {% for story in filterHealth %}
+          <div class="mt-3">
+            <a style="color: black" href="#"><h6>{{ story.title }}</h6></a>
+            <p class="card-text">{{ story.description|slice:"0:200" |safe }}</p>
+          </div>
+          {% endfor %}
+
+          <div class="mt-3">
+            <a href="health">more Health &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

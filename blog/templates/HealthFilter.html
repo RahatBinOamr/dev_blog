@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block content %}
+
+<section class="container">
+  <h2>Health </h2>
+  <div class="row row-cols-1 row-cols-md-4 g-2">
+    {% for story in filterHealth %}
+
+    <div class="col mt-4">
+      <div class="card h-100">
+        <a href="{% url 'postDetails' story.slug %}">
+          <img src="/media/{{story.image}}" class="card-img-top "  style ="height:150px"  alt="story"
+        /></a>
+        <div class="card-body">
+          <h5 class="card-title">{{ story.title }}</h5>
+          <p class="card-text">{{ story.description|slice:"0:100" |safe }}</p>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
