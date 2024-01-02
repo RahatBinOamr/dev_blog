@@ -8,7 +8,7 @@ def createPost(request):
       forms = PostForm(request.POST, request.FILES)
       if forms.is_valid():
         forms.save()
-        return redirect('home')
+        return redirect('postManagement')
   else:
       forms=PostForm()
   context={
@@ -31,7 +31,7 @@ def updatePost(request,pk=None):
         forms = PostForm(request.POST, request.FILES, instance=post)
         if forms.is_valid():
             forms.save()
-            return redirect('home')
+            return redirect('postManagement')
     else:
         forms = PostForm(instance=post)
 

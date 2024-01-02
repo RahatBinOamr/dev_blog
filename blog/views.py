@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from blog.models import Post,Category,Like,Comment,Bookmark
 from .forms import commentForm
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 def HomePage(request):
   stories = Post.objects.all().order_by('?')[:5]
@@ -49,11 +50,31 @@ def PostDetails(request,slug):
   return render(request, 'postDetails.html', context)
 
 def AllStory(request):
-  stories = Post.objects.all()
-  context={
+    stories = Post.objects.all()
+
+    # searching the  post 
+    query = request.GET.get('search')
+    if query:
+        stories = Post.objects.filter(Q(title__contains=query) )
+    else:
+        stories = Post.objects.all().order_by('-id')
+
+
+    # pagination
+    items_per_page = 8
+    paginator = Paginator(stories, items_per_page)
+    page = request.GET.get('page')
+    try:
+        stories = paginator.page(page)
+    except PageNotAnInteger:
+        stories = paginator.page(1)
+    except EmptyPage:
+        stories = paginator.page(paginator.num_pages)
+
+    context={
     'stories': stories
-  }
-  return render(request, 'AllStories.html', context)
+    }
+    return render(request, 'AllStories.html', context)
 
 def TechFilter(request):
     filterTech= Post.objects.filter(Q(category__name ='Tech')).order_by('?')

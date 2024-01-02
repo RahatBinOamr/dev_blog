@@ -20,4 +20,3 @@ class PostForm(forms.ModelForm):
             'isBookmark': forms.RadioSelect({'class': 'form-control'}),
 
         } 
-  
