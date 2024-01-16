@@ -142,9 +142,8 @@ def add_bookmark(request, pk=None):
 
 def remove_bookmark(request, pk=None):
     data = get_object_or_404(Bookmark, pk=pk)
-    post = get_object_or_404(Post, pk=pk)
-    post.bookmarks -=1
-    post.save()
+    data.post.bookmarks -=1
+    data.save()
     data.delete() 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
 
