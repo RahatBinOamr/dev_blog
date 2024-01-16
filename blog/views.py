@@ -6,48 +6,54 @@ from .forms import commentForm
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
-def HomePage(request):
-  stories = Post.objects.all().order_by('?')[:5]
-  stories_ordered_by_likes = Post.objects.all().order_by('-likes')[:3]
-  filterTech= Post.objects.filter(Q(category__name ='Tech')).order_by('?')[:3]
-  filterBusiness= Post.objects.filter(Q(category__name ='Business')).order_by('?')[:3]
-  filterHealth= Post.objects.filter(Q(category__name ='Health')).order_by('?')[:3]
-  context={
-    'stories': stories,
-    'filterTech': filterTech,
-    'filterBusiness': filterBusiness,
-    'filterHealth': filterHealth,
-    'stories_ordered_by_likes':stories_ordered_by_likes,
-    
-  }
-  return render(request, 'index.html', context)
 
-@login_required
+
+
+def HomePage(request):
+    stories = Post.objects.all().order_by('?')[:5]
+    stories_ordered_by_likes = Post.objects.all().order_by('-likes')[:3]
+
+    filterTech= Post.objects.filter(Q(category__name ='Tech')).order_by('?')[:3]
+    filterBusiness= Post.objects.filter(Q(category__name ='Business')).order_by('?')[:3]
+    filterHealth= Post.objects.filter(Q(category__name ='Health')).order_by('?')[:3]
+
+
+    context={
+        'stories': stories,
+        'filterTech': filterTech,
+        'filterBusiness': filterBusiness,
+        'filterHealth': filterHealth,
+        'stories_ordered_by_likes':stories_ordered_by_likes,
+        
+    }
+    return render(request, 'index.html', context)
+
+
 def PostDetails(request,slug):
-  story = get_object_or_404(Post, slug=slug)
-  reviews = Comment.objects.filter(post=story)
-  likeCount= Like.objects.filter(post=story).count()
-  stories = Post.objects.filter(Q(category__name=story.category)).exclude(slug=story.slug)
-  if request.method == 'POST':
-        form = commentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = request.user  
-            comment.post = story
-            story.comments +=1
-            story.save()
-            comment.save()
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
-  else:
-      form = commentForm()
-  context={
-    'story': story,
-    'stories': stories,
-    'likeCount': likeCount,
-    'form': form,
-    'reviews':reviews
-  }
-  return render(request, 'postDetails.html', context)
+    story = get_object_or_404(Post, slug=slug)
+    reviews = Comment.objects.filter(post=story)
+    likeCount= Like.objects.filter(post=story).count()
+    stories = Post.objects.filter(Q(category__name=story.category)).exclude(slug=story.slug)
+    if request.method == 'POST':
+            form = commentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.user = request.user  
+                comment.post = story
+                story.comments +=1
+                story.save()
+                comment.save()
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
+    else:
+        form = commentForm()
+    context={
+        'story': story,
+        'stories': stories,
+        'likeCount': likeCount,
+        'form': form,
+        'reviews':reviews
+    }
+    return render(request, 'postDetails.html', context)
 
 def AllStory(request):
     stories = Post.objects.all()
@@ -109,7 +115,7 @@ def CategoryFilter(request,category_name):
     return render(request, 'allCategoryContent.html', context)
 
 
-login_required
+@login_required(login_url='login')
 def like_post(request, pk):
     post = get_object_or_404(Post, id=pk)
 
@@ -125,7 +131,7 @@ def like_post(request, pk):
         post.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
 
-
+@login_required(login_url='login')
 def add_bookmark(request, pk=None):
     if request.user.is_authenticated:
         post = get_object_or_404(Post, pk=pk)
@@ -151,9 +157,17 @@ def bookmarksCollection(request):
     return render(request,'bookmarks.html',context)
 
 
+def about(request):
+    return render(request,'about.html')
 
 
-
+def LikeView(request,pk=None):
+    post = get_object_or_404(Post,pk=pk)
+    likeView = get_object_or_404(Like,post=post)
+    context={
+        'likeView':likeView,
+    }
+    return render(request,'Stories.html',context)
 
 
 

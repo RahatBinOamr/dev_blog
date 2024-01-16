@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render,redirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import PostForm
 from blog.models import Post
 # Create your views here.
@@ -18,6 +19,17 @@ def createPost(request):
 
 def postCollection(request):
     posts = Post.objects.all()
+
+    # pagination
+    items_per_page = 4
+    paginator = Paginator(posts, items_per_page)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
     context={
         'posts': posts
     }

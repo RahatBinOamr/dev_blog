@@ -18,7 +18,12 @@
             </div>
           </div>
           <div class="d-flex justify-content-end">
-            <img src="/media/{{story.image}}" class="w-50 rounded" alt="img" />
+            <img
+              src="/media/{{story.image}}"
+              class="rounded"
+              alt="img"
+              style="height: 110px; width: 200px"
+            />
           </div>
         </div>
         <hr />
@@ -43,26 +48,27 @@
               <!-- Title and Paragraph on the Right -->
               <div class="mx-3">
                 <a href="{% url 'postDetails' story.slug %}">
-                  <h5 style="color: #000">{{ story.title }}</h5></a
-                >
+                  <h5 style="color: #000">{{ story.title }}</h5>
+                </a>
                 <p class="">{{ story.description|slice:"0:100" |safe }}</p>
                 <div style="margin-top: -20px" class="d-flex">
                   <!-- Love Icon -->
-                  <span class="d-flex align-items-center text-danger"
-                    ><i class="bi bi-heart-fill"></i>
-                    <p class="p-2">{{story.get_like_count}}</p></span
-                  >
+                  <span class="d-flex align-items-center text-danger">
+                    <i class="bi bi-heart-fill"></i>
+                    <p class="p-2">{{story.get_like_count}}</p>
+                  </span>
 
                   <!-- Comment Icon -->
-                  <span style="color:black" class="d-flex align-items-center">
-                   <i class="bi bi-chat-left-dots"></i>
+                  <span style="color: black" class="d-flex align-items-center">
+                    <i class="bi bi-chat-left-dots"></i>
                     <p class="p-2">{{story.get_comments_count}}</p>
                   </span>
                   <!-- save Icon -->
-                  <span style="color:black" class="d-flex align-items-center">
-                  <i class="bi bi-bookmark-check-fill"></i>
+                  <span style="color: black" class="d-flex align-items-center">
+                    <i class="bi bi-bookmark-check-fill"></i>
                     <p class="p-2">{{story.get_bookmarks_count}}</p>
                   </span>
+                  <!-- save Icon -->
                 </div>
               </div>
             </div>

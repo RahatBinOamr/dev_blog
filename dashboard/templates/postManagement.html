@@ -2,10 +2,63 @@
 
 <section class="container mt-5">
   <div class="d-flex justify-content-between align-items-center">
-    <h3>posts</h3>
+   
     <a href="{% url 'create'  %}">
       <button class="btn btn-info">create post</button>
     </a>
+    <!-- pagination -->
+    <div class=" d-flex justify-content-between">
+      <div></div>
+      <div class="mt-4">
+        <nav aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            {% if posts.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page=1" aria-label="First">
+                <span aria-hidden="true">&laquo;&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="?page={{ posts.previous_page_number }}"
+                aria-label="Previous"
+              >
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+              <span class="page-link">
+                Page{{ posts.number }} of {{posts.paginator.num_pages}}
+              </span>
+            </li>
+
+            {% if posts.has_next %}
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="?page={{ posts.next_page_number }}"
+                aria-label="Next"
+              >
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="?page={{ posts.paginator.num_pages }}"
+                aria-label="Last"
+              >
+                <span aria-hidden="true">&raquo;&raquo;</span>
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </div>
   </div>
   <div class="row mt-4">
     <div class="col">
