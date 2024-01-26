@@ -108,11 +108,10 @@
                 <!-- List of categories goes here -->
                 {% for i in categories %}
                 <a class="dropdown-item" href="{% url 'category' i.name %}"
-                  >{{ i.name }}</a
-                >
+                  >{{ i.name }}
+                </a>
 
                 {% endfor %}
-                <!-- Add more categories as needed -->
               </div>
             </li>
             <li class="nav-item">

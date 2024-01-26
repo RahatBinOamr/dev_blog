@@ -1,5 +1,4 @@
 from django.shortcuts import render,get_object_or_404
-from django.db.models import Count
 from django.http import HttpResponseRedirect
 from blog.models import Post,Category,Like,Comment,Bookmark
 from .forms import commentForm
@@ -89,7 +88,7 @@ def TechFilter(request):
     }
     return render(request, 'TechFilter.html', context)
 
-
+# MVT = MODEL VIEW Template 
     
 def BusinessFilter(request):
     filterBusiness= Post.objects.filter(Q(category__name ='Business')).order_by('?')
