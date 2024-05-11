@@ -1,11 +1,11 @@
 from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponseRedirect
 from blog.models import Post,Category,Like,Comment,Bookmark
-from .forms import commentForm
+from .forms import ContactForm, commentForm,SubscribeForm
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
 
 
 def HomePage(request):
@@ -27,7 +27,7 @@ def HomePage(request):
     }
     return render(request, 'index.html', context)
 
-
+@login_required(login_url='login')
 def PostDetails(request,slug):
     story = get_object_or_404(Post, slug=slug)
     reviews = Comment.objects.filter(post=story)
@@ -42,6 +42,7 @@ def PostDetails(request,slug):
                 story.comments +=1
                 story.save()
                 comment.save()
+                messages.success(request, 'Your Review Added successfully!')
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
     else:
         form = commentForm()
@@ -108,6 +109,16 @@ def HealthFilter(request):
 def CategoryFilter(request,category_name):
     category = get_object_or_404(Category, name=category_name)
     data = Post.objects.filter(Q(category__name=category))
+    # pagination
+    items_per_page = 8
+    paginator = Paginator(data, items_per_page)
+    page = request.GET.get('page')
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
     context={
         'data':data
     }
@@ -122,11 +133,13 @@ def like_post(request, pk):
         Like.objects.filter(post=post, user=request.user).delete()
         post.likes -=1
         post.isLike = False
+        messages.success(request, 'Your dislike successfully!')
         post.save()
     else:
         Like.objects.create(post=post,user=request.user)
         post.likes +=1
         post.isLike = True
+        messages.success(request, 'Your Like successfully!')
         post.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
 
@@ -136,6 +149,7 @@ def add_bookmark(request, pk=None):
         post = get_object_or_404(Post, pk=pk)
         Bookmark.objects.get_or_create(user=request.user, post=post)
         post.bookmarks +=1
+        messages.success(request, 'Your Bookmark Added successfully!')
         post.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
 
@@ -143,10 +157,12 @@ def remove_bookmark(request, pk=None):
     data = get_object_or_404(Bookmark, pk=pk)
     data.post.bookmarks -=1
     data.save()
+
     data.delete() 
+    messages.success(request, 'Your bookmark remove successfully!')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
 
-
+@login_required(login_url='login')
 def bookmarksCollection(request):
     bookmarks=Bookmark.objects.filter(user=request.user)
     context={
@@ -171,3 +187,25 @@ def LikeView(request,pk=None):
 
 
 
+def ContactPage(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your Contact submit successfully!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
+    else:
+        form = ContactForm()
+    return render(request,'contact.html',{'form': form})
+
+
+def SubscriptionPage(request):
+    if request.method == 'POST':
+        form = SubscribeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your are subscription successfully!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
+    else:
+        form = SubscribeForm()
+    return render(request,'subscribe.html',{'form': form})

@@ -1,5 +1,5 @@
 from django.urls import path
-from blog.views import HomePage,PostDetails,AllStory,TechFilter,BusinessFilter,HealthFilter,CategoryFilter,like_post,add_bookmark, remove_bookmark,bookmarksCollection,about,LikeView
+from blog.views import HomePage,PostDetails,AllStory,TechFilter,BusinessFilter,HealthFilter,CategoryFilter,like_post,add_bookmark, remove_bookmark,bookmarksCollection,about,LikeView,ContactPage,SubscriptionPage
 
 urlpatterns = [
     path('',HomePage,name="home"),
@@ -14,5 +14,8 @@ urlpatterns = [
     path('remove_bookmark/<pk>', remove_bookmark, name='remove_bookmark'),
     path('bookmark/', bookmarksCollection, name='bookmark'),
     path('about/', about, name='about'),
+    path('contact/', ContactPage, name='contact'),
+    path('contact/', ContactPage, name='contact'),
+    path('subscribe/', SubscriptionPage, name='subscribe'),
     path('like/<pk>', LikeView, name='like'),
 ]

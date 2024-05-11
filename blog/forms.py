@@ -1,5 +1,7 @@
 from django import forms
-from .models import Comment
+
+from .models import Contact
+from .models import Comment,Subscribe
 
 
 
@@ -11,3 +13,13 @@ class commentForm(forms.ModelForm):
         widgets={
             'comment':forms.TextInput({'class': 'form-control'})
         }
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'message']
+
+class SubscribeForm(forms.ModelForm):
+    class Meta:
+        model = Subscribe
+        fields = ['name', 'email', ]
