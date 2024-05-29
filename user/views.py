@@ -1,11 +1,14 @@
 from django.shortcuts import redirect, render
 from user.forms import RegistrationForm, UpdateProfileForm, UpdateRegisterForm
 from django.contrib.auth import logout
+from django.contrib import messages
+
 def Register(request):
     if request.method =='POST':
         form =RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Your  Register successfully!')
             return redirect('login')
     else:
         form =RegistrationForm()
@@ -13,6 +16,7 @@ def Register(request):
 
 def LogOut(request):
     logout(request)
+    messages.success(request, 'Your  Logout successfully!')
     return redirect('login')
 
 def Profile(request):
@@ -25,6 +29,7 @@ def UpdateProfile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
+            
             return redirect('profile')
     else:
         u_form =  UpdateRegisterForm(instance=request.user)

@@ -2,13 +2,13 @@
 
 <section class="container">
   <h2>Tech </h2>
-  <div class="row row-cols-1 row-cols-md-4 g-2">
+  <div class="row row-cols-1  row-cols-md-4 g-2 mt-4">
     {% for story in filterTech %}
 
-    <div class="col mt-4">
+    <div class="col mt-3">
       <div class="card h-100">
         <a href="{% url 'postDetails' story.slug %}">
-          <img src="/media/{{story.image}}" class="card-img-top "  style ="height:150px"  alt="story"
+          <img src="/media/{{story.image}}" class="card-img-top"  style ="height:150px"  alt="story"
         /></a>
         <div class="card-body">
           <h5 class="card-title">{{ story.title }}</h5>

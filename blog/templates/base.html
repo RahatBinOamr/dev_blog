@@ -29,6 +29,11 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
@@ -163,7 +168,7 @@
                 class="profile-dropdown-menu"
                 aria-labelledby="profileDropdown"
               >
-                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                {% comment %} <a class="dropdown-item" href="{% url 'profile' %}">Profile</a> {% endcomment %}
                 <a class="dropdown-item" href="{% url 'bookmark' %}"
                   ><i class="bi bi-bookmark-check-fill"></i>Bookmark
                   <span style="color: #ffff" class="badge rounded bg-danger">

@@ -32,7 +32,7 @@ def PostDetails(request,slug):
     story = get_object_or_404(Post, slug=slug)
     reviews = Comment.objects.filter(post=story)
     likeCount= Like.objects.filter(post=story).count()
-    stories = Post.objects.filter(Q(category__name=story.category)).exclude(slug=story.slug)
+    stories = Post.objects.filter(Q(category__name=story.category)).exclude(slug=story.slug).order_by('?')
     if request.method == 'POST':
             form = commentForm(request.POST)
             if form.is_valid():
@@ -120,7 +120,8 @@ def CategoryFilter(request,category_name):
     except EmptyPage:
         data = paginator.page(paginator.num_pages)
     context={
-        'data':data
+        'data':data,
+        "category_name":category_name
     }
     return render(request, 'allCategoryContent.html', context)
 
@@ -198,14 +199,19 @@ def ContactPage(request):
         form = ContactForm()
     return render(request,'contact.html',{'form': form})
 
-
+from django.core.mail import send_mail
+from django.conf import settings
 def SubscriptionPage(request):
     if request.method == 'POST':
         form = SubscribeForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Your are subscription successfully!')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER') )
+            subscription = form.save()
+            subject = 'Subscription Successful'
+            message = f'Thank you {subscription.name} for subscribing to dev.io site!'
+            recipient_list = [subscription.email]
+            send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
+            messages.success(request, 'You are subscribed successfully!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     else:
         form = SubscribeForm()
-    return render(request,'subscribe.html',{'form': form})
+    return render(request, 'subscribe.html', {'form': form})
